@@ -50,9 +50,24 @@ Dm = 0;
 Mobsv   = obsv(Am, Cm);
 rMobsv  = rank(Mobsv); % this rank should be equal to 3 for observability
 
+% check controllability... can we move that unstable eigenvalue?
+Mctrb   = ctrb(Am, Bm);
+rMctrb  = rank(Mctrb); % this rank should be equal to 3 for controllability
+
 % we don't have an observable system, so our best bet is output-feedback
-% control; let's try it
+% control; let's try it --- BTW, rMctrb = 3, therefore it's all we need
 Sm = ss(Am, Bm, Cm, Dm); % get a state model of the main system
+eigs_Sm = eig(Am);
 Hm = tf(Sm);
+numHm = cell2mat(Hm.num);
+denHm = cell2mat(Hm.den);
+zeros_Hm = roots(numHm);
+poles_Hm = roots(denHm);
 
-
+% the system from disturbance, w, to the output y, may be described as:
+Sd = ss(Am, Rm, Cm, Dm);
+Hd = tf(Sd)
+numHd = cell2mat(Hd.num);
+denHd = cell2mat(Hd.den);
+zeros_Hd = roots(numHd);
+poles_Hd = roots(denHd);
