@@ -82,13 +82,24 @@ SSL = ss_series(SSc,Sm);
 rlocus(SSL); 
 % based on root locus, we pick k=100;
 SSk = ss_simple_neg_feedback(SSL, 1);
-tfinal = 20;
-[Y,T,X] = step(SSk,tfinal);
-figure; plot(T,Y); title("step response"); grid;
+
+% let's do a simulation
+delta = 0.005;
+% notable time points with corresponding inputs sizes (steps)
+Tstar = [delta   0.5    1.0   3.0   3.5   3.75    4.0   5.0];
+Uvals = [0       1.0   -1.0   0.0   0.5   -0.5    0.0   0.0];
+T=0;
+U=0;
+for i = 1:(max(size(Tstar))-1)
+  TR = (Tstar(i):delta:(Tstar(i+1)-delta))';
+  T = [T; TR];
+  U = [U; Uvals(i)*ones(max(size(TR)),1)];
+endfor
+[Ysim, Tsim, X] = lsim(SSk, U, T);
+figure; plot(Tsim,Ysim); title("output and state response"); grid;
 figure; 
-subplot(411);plot(T,X(:,1),'r-');grid;
-subplot(412);plot(T,X(:,2),'g-');grid;
-subplot(413);plot(T,X(:,3),'b-');grid;
-subplot(414);plot(T,X(:,4),'k-');grid;
-title("states");
+subplot(411);plot(Tsim,X(:,1),'r-');grid;title("controller state");
+subplot(412);plot(Tsim,X(:,2),'g-');grid;title("theta");
+subplot(413);plot(Tsim,X(:,3),'b-');grid;title("thetadot");
+subplot(414);plot(Tsim,X(:,4),'r-',T,U,'b-');grid;title("i_a and reference");
 
