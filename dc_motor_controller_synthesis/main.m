@@ -75,13 +75,13 @@ poles_Hd = roots(denHd);
 % form the loop gain for design, trial with integrator controller
 Ac = 0;
 Bc = 1;
-Cc = 1; % this is actually the gain, k0, to be determined by root locus
+Cc = 300; % this is actually the gain, k0, to be determined by root locus
 Dc = 0;
 SSc = ss(Ac,Bc,Cc,Dc); % state-space model of controller
 SSL = ss_series(SSc,Sm);
 rlocus(SSL); 
 % based on root locus, we pick k=100;
-SSk = ss_simple_neg_feedback(SSL, 100);
+SSk = ss_simple_neg_feedback(SSL, 1);
 tfinal = 2;
 step(SSk,tfinal);
 
