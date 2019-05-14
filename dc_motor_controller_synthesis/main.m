@@ -66,8 +66,17 @@ poles_Hm = roots(denHm);
 
 % the system from disturbance, w, to the output y, may be described as:
 Sd = ss(Am, Rm, Cm, Dm);
-Hd = tf(Sd)
+Hd = tf(Sd);
 numHd = cell2mat(Hd.num);
 denHd = cell2mat(Hd.den);
 zeros_Hd = roots(numHd);
 poles_Hd = roots(denHd);
+
+% form the loop gain for design, trial with integrator controller
+Ac = 0;
+Bc = 1;
+Cc = 1; % this is actually the gain, k0, to be determined by root locus
+Dc = 0;
+SSc = ss(Ac,Bc,Cc,Dc); % state-space model of controller
+SSL = series_ss(SSc,Sm); 
+
