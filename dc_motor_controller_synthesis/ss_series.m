@@ -1,18 +1,24 @@
-function SS0 = series_ss(SS1,SS2)
-  
-  % this function assumes that the systems SS1 and SS2
-  % are connected in series, i.e., 
-  %
-  %     u1        y1          y2
-  %   ----> SS1 ------> SS2 ----->
-  %
-  %   ---------->  SS0 ---------->
-  %       u1               y2
-  %
-  % author: Takis Zourntos
-  % date: May 2019
-  %
-  
+## Copyright (C) 2019 Takis Zourntos
+## author: Takis Zourntos
+## date: May 2019
+##
+function SS0 = ss_series(SS1,SS2)
+%%
+%% SS0 = ss_series(SS1, SS2)
+%%
+%% This function assumes that the systems SS1 and SS2
+%% are connected in series, i.e., 
+%%
+%%     u1        y1          y2
+%%   ----> SS1 ------> SS2 ----->
+%%
+%% The function returns the state-space model of the 
+%% resulting system: 
+%%
+%%   ---------->  SS0 ---------->
+%%       u1               y2
+%%
+
   % define the state-space matrices
   A1 = SS1.a;
   B1 = SS1.b;

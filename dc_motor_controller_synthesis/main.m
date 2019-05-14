@@ -7,7 +7,7 @@
 % author: Takis Zourntos
 % date: May 12, 2019
 %
-
+close all;
 clear all;
 clc;
 pkg load control;
@@ -20,8 +20,8 @@ pkg load control;
   T_stall = 0.0074; % stall torque [kg m]
 
   % derived from spec sheet parameters and/or estimated (ballparked)
-  J = 0.00001; % rotor mechanical inertia [N m s^2 / rad]
-  b = 0.000001; % viscous damping coefficient
+  J = 0.0001; % rotor mechanical inertia [N m s^2 / rad]
+  b = 0.00001; % viscous damping coefficient
   Ke = Vr/W_free_run_Vr; % emf constant
   KT = T_stall/I_stall_Vr; % torque constant, i.e., torque = KT i_a
   Ra = Vr/I_stall_Vr; % armature winding resistance (Ohms)
@@ -32,7 +32,7 @@ pkg load control;
 % A-matrix
 Am = [0             1             0;
       0             -(b/J)        (KT/J);
-      0             -(Ke/La)      -(Ra/La);];
+      0             -(Ke/La)      -(Ra/La)];
 % B-matrix
 Bm = [0;
       0;
@@ -78,5 +78,10 @@ Bc = 1;
 Cc = 1; % this is actually the gain, k0, to be determined by root locus
 Dc = 0;
 SSc = ss(Ac,Bc,Cc,Dc); % state-space model of controller
-SSL = series_ss(SSc,Sm); 
+SSL = ss_series(SSc,Sm);
+rlocus(SSL); 
+% based on root locus, we pick k=100;
+SSk = ss_simple_neg_feedback(SSL, 100);
+tfinal = 2;
+step(SSk,tfinal);
 
