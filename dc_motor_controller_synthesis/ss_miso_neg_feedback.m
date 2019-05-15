@@ -1,21 +1,25 @@
 %% Copyright (C) 2019 Takis Zourntos
 ## Author: Takis Zourntos <takis@black-machine>
 ## Created: 2019-05-13
-function [SSk] = ss_simple_neg_feedback (SSmod, k)
+function [SSk] = ss_miso_neg_feedback(SSmod, k)
 %%
-%% SSk = ss_mimo_neg_feedback(SSmod, k)
+%% SSk = ss_miso_neg_feedback(SSmod, k)
 %%
-%% This function assumes that the SISO system SSmod and simple gain k
-%% are connected in negative feedback; the input of SSmod
+%% This function assumes that the MISO system SSmod and simple gain k
+%% are connected in negative feedback; the first input of SSmod
 %% is used to close the loop around the loop gain. 
 %%
-%%          __         
-%%      +  /  \ 
+%% 
+%%                          w
+%%          __              |
+%%      +  /  \             V 
 %%  r---->|    |--------> SSmod ----------------> y
 %%         \__/                            |
 %%        -  ^                             |
 %%           |                             |
 %%           -------------- k  <------------
+%%
+%% composite system has inputs r and w, output y
 %%
 
 % extract state information
@@ -23,11 +27,13 @@ function [SSk] = ss_simple_neg_feedback (SSmod, k)
 %       2) D matrix must be zero
 A = SSmod.a;
 B = SSmod.b;
+B1 = B(:,1);
+B2 = B(:,2);
 C = SSmod.c;
 D = SSmod.d;
-if ((D == 0) && (size(B)(2)==size(C)(1)))
+if ((max(max(abs(D))) == 0))
   % form composite system
-  Ak = (A - k*B*C); 
+  Ak = (A - k*B1*C); % only first input stabilizes, changes A
   Bk = B;
   Ck = C;
   Dk = D;
