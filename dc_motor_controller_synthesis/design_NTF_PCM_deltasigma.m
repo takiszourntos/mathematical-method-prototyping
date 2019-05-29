@@ -23,8 +23,8 @@ close all;
 
 
 % sample rate of PCM (don't need really high res)
-F_s = 2^17 % how fast we expect the clock to go ~ 10kHz - 100kHz
-OSR = 256
+F_s = 250e3;% 2^18 % how fast we expect the clock to go ~ 10kHz - 100kHz
+OSR = 512
 F_b = F_s/(2*OSR)
 F_range = linspace(0,4*F_b,2^20)';
 
@@ -46,20 +46,23 @@ maga(:,1) = mag(1,1,:); pha(:,1) = ph(1,1,:);
 figure;plot(F_range, 20*log10(maga));grid;title('2nd-order solution');
 max(maga) % confirm max OOBG
 
-% convert to H(s):
-prec = 1e6;
-denHs = floor(prec*(numNTF))/prec;
-numHs = floor(prec*(denNTF-numNTF))/prec;
-Hs = tf(numHs,denHs) % loop TF
+% get loop filter
+denHs = numNTF;
+denHs_corrected = [denHs(1) 0 0];
+numHs = denNTF-numNTF;
+numHs_corrected = [0 numHs(2) numHs(3)];
+Hs_original = tf(numHs, denHs);
+Hs = tf(numHs_corrected, denHs_corrected);
 
-% confirm NTF still works after finite precision effects:
+% confirm NTF still works after corrections:
 numNTFtest = denHs;
 denNTFtest = denHs + numHs;
 NTFtest = tf(numNTFtest, denNTFtest);
 [magtest, phtest] = bode(NTFtest,2*pi*F_range);
 magtesta(:,1) = magtest(1,1,:); phtesta(:,1) = phtest(1,1,:);
-figure;plot(F_range, 20*log10(magtesta));grid;title('2nd-order solution');
+figure;plot(F_range, 20*log10(maga),'b+',F_range, 20*log10(magtesta),'r-');grid;title('2nd-order solution - corrected');
 max(magtesta) % confirm max OOBG
+
 
 %%% convert discrete-time
 Hd = c2d(Hs,1/F_s,'zoh');
