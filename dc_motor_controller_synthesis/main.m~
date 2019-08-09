@@ -34,7 +34,7 @@ Cp_omega = [0 1];
 Cp_ia    = [1 0];
 Cp = [Cp_omega; Cp_ia];
 Dp = 0;
-PMss = ss(Ap, Bp, Cp, Dp);
+Pss = ss(Ap, Bp, Cp, Dp);
 
 %% controller: CM(s) and state-feedback gain, kC
 gam0 = 1; % controller gain
@@ -47,8 +47,8 @@ denCM0 = poly([0; -gam3]);
 CM0 = tf(numCM0,denCM0);
 CM0ss = ss(CM0); [ACM0, BCM0, CCM0, DCM0] = ssdata(CM0ss);
 
-%% LM: series connection of CM and PM
-LM = series(CM0, PMss, 1, 1);
+%% L: series connection of CM and PM
+
   
 
 %% simulation parameters
