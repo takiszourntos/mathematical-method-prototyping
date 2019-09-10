@@ -1,0 +1,39 @@
+echo everything is now recorded
+{Error using <a href="matlab:matlab.internal.language.introspective.errorDocCallback('echo')" style="font-weight:bold">echo</a>
+Too many input arguments.
+} 
+I7 = eye(7)
+
+I7 =
+
+     1     0     0     0     0     0     0
+     0     1     0     0     0     0     0
+     0     0     1     0     0     0     0
+     0     0     0     1     0     0     0
+     0     0     0     0     1     0     0
+     0     0     0     0     0     1     0
+     0     0     0     0     0     0     1
+
+m3 = rand(3,1)
+
+m3 =
+
+    0.8147
+    0.9058
+    0.1270
+
+who
+
+Your variables are:
+
+I7  m3  
+
+what
+
+MATLAB Code files in the current folder \\DC2\InstructorFiles$\takis.zourntos\My Documents\MATLAB
+
+ese2014_Lab1_solns      ese_2014_Lab_1_solns_2  impfcn                  
+
+
+ese2014_Lab1_solns
+diary off
