@@ -69,7 +69,7 @@ Ysba = spec_sba*ones(size(Wrange));
     title('Elliptical Analog Filter Response (N=6)');
     xlabel('freq (kHz)');
     ylabel('response (dB)');
-    % plot specs/constraints for comparison
+    % plot specs/constraints for comparisonhe
     hold on; plot(Frange,20*log10(Ypbrpos),'r-', Frange,20*log10(Ypbrneg),'r-',Frange,20*log10(Ysba),'r-');
     xline(spec_fc1,'r-'); xline(spec_fc2,'r-');
 
